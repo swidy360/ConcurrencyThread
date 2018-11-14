@@ -2,6 +2,46 @@ package com.swidy.concurrency.stage2.chapter3;
 
 /**
  * 初识volatile关键字用例一
+ * 涉及到的知识点
+ * 1、CPU的大致结构
+ * 2、JMM的内存模型
+ * 3、缓存一致性协议
+ * 4、指令重排序
+ * 5、happen-before原则
+ * 6、并发编程的三大要素
+ * 7、volatile关键字的使用场景
+ * 
+ * 一旦一个共享变量被volatile修饰，具备两层语义
+ * 1、保证不同线程间的可见性
+ * 2、禁止对其进行指令重排序，也就保证了有序性
+ * 3、并未保证原子性
+ * 
+ * volatile关键字
+ * 1、保证重排序的时候不会把后面的指令放到屏障前面，也不会把前面的放到后面
+ * 2、强制对缓存的修改操作立刻写入主存
+ * 3、如果是写操作，会导致其他cpu中的缓存失效
+ * 
+ * volatile使用场景
+ * 1、状态标记量
+ * volatile boolean start = true;
+ * while(start){
+ * 		//
+ * }
+ * void close(){
+ * 		start = false;
+ * }
+ * 2、屏障前后的一致性(单例double check)
+ * volatile boolean init;
+ * ---------Thread-1------------
+ * obj = createObj();			1;
+ * init = true;					2;
+ * ---------Thread-2------------
+ * while(!init){
+ * 		sleep(1);
+ * }
+ * useTheObj(obj);
+ * -----------------------------
+ * 
  * @author swidy360
  * @date 2018年11月13日 下午4:45:48   
  */
